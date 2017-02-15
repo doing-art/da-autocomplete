@@ -1,5 +1,5 @@
 {
-  "name": "da-autocomplete.dev",
+  "name": "da-autocomplete",
   "version": "1.0.0",
   "description": "There is a test project.",
   "main": "index.js",
@@ -7,8 +7,9 @@
   "author": "Paramonov_Nick <paramonov.work@gmail.com>",
   "license": "MIT",
   "babel": {
-    "presets": [
-      "es2015"
+    "presets": ["es2015"],
+    "plugins": [
+      "add-module-exports"
     ]
   },
   "scripts": {
@@ -19,8 +20,15 @@
     "babel-cli": "^6.22.2",
     "babel-core": "^6.22.1",
     "babel-loader": "^6.2.10",
+    "babel-plugin-add-module-exports": "^0.2.1",
     "babel-preset-es2015": "^6.22.0",
-    "webpack": "^2.2.1"
+    "babel-register": "^6.23.0",
+    "gulp": "^3.9.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-sourcemaps": "^2.4.1",
+    "gulp-uglify": "^2.0.1",
+    "webpack": "^2.2.1",
+    "webpack-stream": "^3.2.0"
   },
   "devDependencies": {}
 }
