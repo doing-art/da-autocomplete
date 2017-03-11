@@ -7,11 +7,12 @@
  *            License(s): MIT
  *         
  */
-.test {
-  color: red;
-  -webkit-transition: color 0.3s;
-  -o-transition: color 0.3s;
-  -moz-transition: color 0.3s;
-  transition: color 0.3s; }
+@font-face {
+  font-family: 'SegoeUI';
+  src: url(fonts/SegoeUI/SegoeUIRegular.eot);
+  src: local("SegoeUI");
+  src: url(fonts/SegoeUI/SegoeUIRegular.eot?#iefix) format("embedded-opentype"), url(fonts/SegoeUI/SegoeUIRegular.woff) format("woff"), url(fonts/SegoeUI/SegoeUIRegular.ttf) format("truetype"), url(fonts/SegoeUI/SegoeUIRegular.svg#SegoeUI) format("svg");
+  font-weight: normal;
+  font-style: normal; }
 
 /*# sourceMappingURL=da-autocomplete.css.map*/

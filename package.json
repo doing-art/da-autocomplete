@@ -29,6 +29,7 @@
     "babel-runtime": "^6.23.0",
     "css-loader": "^0.26.2",
     "extract-text-webpack-plugin": "^2.1.0",
+    "file-loader": "^0.10.1",
     "gulp": "^3.9.1",
     "node-sass": "^4.5.0",
     "sass-loader": "^6.0.2",

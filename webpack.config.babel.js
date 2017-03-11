@@ -25,7 +25,7 @@ const config = {
 
     resolve: {
         modules: ['node_modules'],
-        extensions: ['.js', '.sass']
+        extensions: ['.js', '.sass', '.ttf']
     },
 
     resolveLoader: {
@@ -45,7 +45,7 @@ const config = {
                 }
             },
             {
-                test: /\.sass/,
+                test: /\.sass$/,
                 loader: ExtractTextPlugin.extract({
                     use: [{
                         loader: 'css-loader?',
@@ -62,6 +62,10 @@ const config = {
                         }
                     }]
                 })
+            },
+            {
+                test: /\.(ttf|eot|woff|svg)$/,
+                loader: 'file?name=[path][name].[ext]'
             }
         ]
     },
