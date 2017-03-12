@@ -14,6 +14,7 @@ const config = {
 
     output: {
         path: __dirname + '/lib',
+        // publicPath: '../',
         library: 'DaAutocomplete',
         libraryTarget: "umd",
         filename: NODE_ENV === 'production' ? `[name]/${pkg.name}.min.js` : `[name]/${pkg.name}.js`,
@@ -48,7 +49,7 @@ const config = {
                 test: /\.sass$/,
                 loader: ExtractTextPlugin.extract({
                     use: [{
-                        loader: 'css-loader?',
+                        loader: 'css-loader',
                         options: {
                             sourceMap: NODE_ENV === 'development',
                             minimize: NODE_ENV === 'production'

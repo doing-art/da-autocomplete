@@ -13,9 +13,9 @@
     </head>
     <body>
         <!-- START EXAMPLE FORM -->
-        <div class="da-autocomplete">
-            <select name="example" class="da-autocomplete__control"></select>
-        </div>
+        <form action="">
+            <input name="example" class="example">
+        </form>
         <!-- END EXAMPLE FORM -->
 
         <!-- LIB JS -->
@@ -23,7 +23,7 @@
 
         <!-- EXAMPLE JS -->
         <script type="text/javascript">
-            console.log(new DaAutocomplete.default());
+            var autocomplete = new DaAutocomplete.default('.example');
         </script>
     </body>
 </html>
