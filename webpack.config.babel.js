@@ -14,7 +14,7 @@ const config = {
 
     output: {
         path: __dirname + '/lib',
-        // publicPath: '../',
+        publicPath: '../',
         library: 'DaAutocomplete',
         libraryTarget: "umd",
         filename: NODE_ENV === 'production' ? `[name]/${pkg.name}.min.js` : `[name]/${pkg.name}.js`,
