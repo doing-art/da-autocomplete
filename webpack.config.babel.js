@@ -14,7 +14,7 @@ const config = {
 
     output: {
         path: __dirname + '/lib',
-        library: '[name]',
+        library: 'DaAutocomplete',
         libraryTarget: "umd",
         filename: NODE_ENV === 'production' ? `[name]/${pkg.name}.min.js` : `[name]/${pkg.name}.js`,
     },
@@ -58,14 +58,15 @@ const config = {
                     }, {
                         loader: 'sass-loader',
                         options: {
-                            sourceMap: NODE_ENV === 'development'
+                            sourceMap: NODE_ENV === 'development',
+                            sourceMapContents: NODE_ENV === 'development'
                         }
                     }]
                 })
             },
             {
                 test: /\.(ttf|eot|woff|svg)$/,
-                loader: 'file?name=[path][name].[ext]'
+                loader: 'file?name=[path][name].[ext]?[hash]'
             }
         ]
     },
@@ -82,8 +83,16 @@ const config = {
            Url: ${pkg.homepage}
            License(s): ${pkg.license}
         `),
-        new ExtractTextPlugin(NODE_ENV === 'production' ? `css/${pkg.name}.min.css` : `css/${pkg.name}.css`)
-    ]
+        new ExtractTextPlugin(NODE_ENV === 'production' ? `css/${pkg.name}.min.css` : `css/${pkg.name}.css`),
+        new webpack.HotModuleReplacementPlugin()
+    ],
+
+    devServer: {
+        host: 'localhost',
+        port: '8080',
+        contentBase: __dirname + '/lib',
+        hot: true
+    }
 };
 
 if(NODE_ENV === 'production') {

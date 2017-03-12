@@ -15,8 +15,8 @@
     ]
   },
   "scripts": {
-    "babel-translate": "babel src/javascript -d lib/js",
-    "webpack-compile": "webpack"
+    "prod": "NODE_ENV=production webpack",
+    "dev": "webpack-dev-server"
   },
   "dependencies": {
     "autoprefixer-loader": "^3.2.0",
@@ -34,6 +34,7 @@
     "node-sass": "^4.5.0",
     "sass-loader": "^6.0.2",
     "webpack": "^2.2.1",
+    "webpack-dev-server": "^2.4.1",
     "webpack-stream": "^3.2.0"
   },
   "devDependencies": {}
