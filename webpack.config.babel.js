@@ -14,7 +14,7 @@ const config = {
 
     output: {
         path: __dirname + '/lib',
-        publicPath: '../',
+        publicPath: '/',
         library: 'DaAutocomplete',
         libraryTarget: "umd",
         filename: NODE_ENV === 'production' ? `[name]/${pkg.name}.min.js` : `[name]/${pkg.name}.js`,
@@ -25,7 +25,7 @@ const config = {
     devtool: NODE_ENV === 'development' ? 'source-map' : false,
 
     resolve: {
-        modules: ['node_modules'],
+        modules: ['src', 'node_modules'],
         extensions: ['.js', '.sass', '.ttf']
     },
 
