@@ -1,20 +1,173 @@
 .da-autocomplete
+  position: relative
   display: inline-block
+  max-width: 100%
   color: $text-color
   font:
     family: $font-family
     weight: $font-weight
-    size: $font-size
-  line-height: $line-height
+    size: $font-size-medium
+  line-height: $line-height-medium
 
   &__search
     position: relative
 
     &-control
+      min-width: 100%
+      padding: 6px
+      border: 1px solid $border-color
+      border-top-color: $border-color-top
+      border-radius: 0
+      box-sizing: border-box
+      background-color: $background-color
       color: inherit
       font: inherit
+
+      &:focus
+        outline: none
+
+      &:hover
+        border-top-color: $border-color-top-hover
+
+      &[disabled]
+        background-color: $background-color-disabled
 
     &-placeholder
       position: absolute
       left: 0
-      top: 50%
+      top: 0
+      overflow: hidden
+      max-width: 100%
+      padding: 7px
+      box-sizing: border-box
+      color: $text-color-light
+      text-overflow: ellipsis
+      white-space: nowrap
+      cursor: text
+      user-select: none
+
+  &__result
+    position: absolute
+    top: 34px
+    left: 0
+    display: none
+    width: 100%
+    border: 1px solid $border-color
+    box-sizing: border-box
+    box-shadow: 0 2px 13px 0px rgba(0, 0, 0, 0.1)
+    background-color: $background-color
+
+    &-list
+      padding-left: 0
+      margin-top: 0
+      margin-bottom: 0
+      list-style: none
+
+    &-item
+      padding: 4px 6px
+      cursor: pointer
+
+      &:last-child
+        margin-bottom: 6px
+
+      &--select
+        background-color: $select-color
+
+      &--focus
+        background-color: $focus-color
+        color: #fff
+
+    &-preloader
+      display: none
+      padding: 6px 31px 9px
+      box-sizing: border-box
+      background: url('../images/preloader.svg') no-repeat 10px 9px
+      background-size: 14px 14px
+      color: $text-color-light
+
+      &--show
+        display: block
+
+    &-success
+      display: none
+      padding: 6px 7px 10px
+      color: $text-color-light
+      font-size: $font-size-small
+      line-height: $line-height-small
+
+    &-empty
+      display: none
+      padding: 6px 7px 10px
+      color: $text-color-light
+
+    &-notification
+      display: none
+
+    &-message
+      padding: 6px
+      color: $text-color-light
+
+    &-reload
+      width: 100%
+      padding: 3px 7px 5px
+      border: none
+      margin-top: 4px
+      background-color: $focus-color
+      color: #fff
+      font: inherit
+      text-align: left
+      cursor: pointer
+
+      &:focus
+        outline: none
+
+  &__validation
+    display: block
+    padding: 0 3px
+
+    &-error
+      display: none
+      margin-top: 6px
+      color: $error-color
+
+  &--focus
+    .da-autocomplete__search-control
+      padding: 5px
+      border: 2px solid $focus-color
+
+    .da-autocomplete__search-placeholder
+      color: $placeholder-color-focus
+
+  &--full
+    .da-autocomplete__search-placeholder
+      display: none
+
+  &--open
+    .da-autocomplete__search-control
+      padding: 5px
+      border: 2px solid $focus-color
+
+    .da-autocomplete__result
+      display: block
+
+  &--error
+    .da-autocomplete__result-notification
+      display: block
+
+  &--success
+    .da-autocomplete__result-success
+      display: block
+
+  &--empty
+    .da-autocomplete__result-empty
+      display: block
+
+  &--validation-error
+    .da-autocomplete__search-control
+      padding: 5px
+      border: 2px solid $error-color
+
+    .da-autocomplete__validation-error
+      display: block
+
+  &--validation-warning

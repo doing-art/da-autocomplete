@@ -47,23 +47,8 @@ const config = {
             },
             {
                 test: /\.sass$/,
-                loader: ExtractTextPlugin.extract({
-                    use: [{
-                        loader: 'css-loader',
-                        options: {
-                            sourceMap: NODE_ENV === 'development',
-                            minimize: NODE_ENV === 'production'
-                        }
-                    }, {
-                        loader: 'autoprefixer-loader?browsers=last 50 version'
-                    }, {
-                        loader: 'sass-loader',
-                        options: {
-                            sourceMap: NODE_ENV === 'development',
-                            sourceMapContents: NODE_ENV === 'development'
-                        }
-                    }]
-                })
+                loader: NODE_ENV === 'development' ? 'style-loader!css-loader?sourceMap!autoprefixer-loader?browsers=last 50 version!sass-loader?sourceMap'
+                    : ExtractTextPlugin.extract(['css-loader?minimize', 'autoprefixer-loader?browsers=last 50 version', 'sass-loader'])
             },
             {
                 test: /\.(ttf|eot|woff|svg)$/,
