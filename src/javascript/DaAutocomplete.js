@@ -1,7 +1,15 @@
 import daConfig from './DaConfig'
 import DaHelpers from './DaHelpers'
 
+/**
+ * Класс, содержащий функционал элемента управления
+ */
 export default class DaAutocomplete {
+    /**
+     *
+     * @param control { selector|element }
+     * @param config { object }
+     */
     constructor(control, config) {
         DaAutocomplete._counter = DaAutocomplete._counter || 0;
         this._controlId = 'da-autocomplete-search-control-' + (++DaAutocomplete._counter);

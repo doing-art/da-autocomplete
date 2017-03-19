@@ -1,4 +1,13 @@
+/**
+ * класс, содержащий вспомогательные методы
+ */
 export default class DaHelpers {
+    /**
+     * проверка является ли @child потомком @parent
+     * @param child { element }
+     * @param parent { element }
+     * @returns { boolean }
+     */
     static isChildOf(child, parent) {
         if (child.parentNode === parent) {
             return true;
@@ -9,6 +18,11 @@ export default class DaHelpers {
         }
     }
 
+    /**
+     * создает новый объект события с поддержкой IE9
+     * @param eventName { string }
+     * @returns { event }
+     */
     static newEvent(eventName) {
         let event;
 
