@@ -209,8 +209,9 @@ export default class DaAutocomplete {
 
     _startSearch(searchPhrase) {
         let XHR = ('onload' in new XMLHttpRequest()) ? XMLHttpRequest : XDomainRequest;
-        let url = `${this._config.requestUrl}?searchPhrase=${searchPhrase}&resultNumberToShow=${this._config.resultNumberToShow}`;
         let xhr = new XHR();
+        let searchPhraseEncode = encodeURIComponent(searchPhrase);
+        let url = `${this._config.requestUrl}?searchPhrase=${searchPhraseEncode}&resultNumberToShow=${this._config.resultNumberToShow}`;
 
         if(this._xhr) {
             this._xhr.abort();
@@ -218,7 +219,7 @@ export default class DaAutocomplete {
         }
 
         xhr.open('GET', url, true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
 
         let promise = new Promise( (resolve, reject) => {
             xhr.onload = () => {
