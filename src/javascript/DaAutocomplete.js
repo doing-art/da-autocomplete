@@ -11,8 +11,9 @@ export default class DaAutocomplete {
             this._initConfig(config);
             this._initTemplate();
             this._initSearch();
-            this._initValidation();
+            this._initParentForm();
             this._initResult();
+            this._initValidation();
         } else {
             console.log('Передайте селектор либо элемент(Node) первым параметром.');
         }
@@ -88,41 +89,33 @@ export default class DaAutocomplete {
         control.addEventListener('keyup', (e) => {
             let newFocused;
 
-            switch(e.keyCode) {
-                case 38:
-                    newFocused = this._itemFocused.previousElementSibling;
-                    newFocused && this._setFocusedItem(newFocused);
-                    break;
-                case 40:
-                    newFocused = this._itemFocused.nextElementSibling;
-                    newFocused && this._setFocusedItem(newFocused);
-                    break;
-                case 27:
-                    this._close();
-                    break;
-                case 13:
-                    this._itemFocused.dispatchEvent(itemClick);
-                    this._moveFocusToNext();
-                    break;
-            }
+            if(this._isOpen()) {
+                switch(e.keyCode) {
+                    case 38:
+                        newFocused = this._itemFocused.previousElementSibling;
+                        newFocused && this._setFocusedItem(newFocused);
+                        break;
+                    case 40:
+                        newFocused = this._itemFocused.nextElementSibling;
+                        newFocused && this._setFocusedItem(newFocused);
+                        break;
+                    case 27:
+                        this._close();
+                        break;
+                    case 13:
+                        this._resultList.childElementCount ? this._itemFocused.dispatchEvent(itemClick)
+                            : this._onClose(itemClick);
+                        this._moveFocusToNext();
+                }
 
-            e.preventDefault();
-            e.stopPropagation();
+                e.preventDefault();
+                e.stopPropagation();
+            }
         });
 
         document.addEventListener('click', (e) => {
             if(!DaHelpers.isChildOf(e.target, this._autocomplete) && this._isOpen()) {
-                let itemNumber = this._resultList.childElementCount;
-
-                if(itemNumber !== 1 || this._isLoading()) {
-                    this._autocomplete.classList.add('da-autocomplete--validation-error');
-                }
-                if(itemNumber === 1) {
-                    this._resultList.querySelector('.da-autocomplete__result-item').dispatchEvent(itemClick);
-                }
-
-                this._clearSelected();
-                this._close();
+                this._onClose(itemClick);
             }
         });
 
@@ -141,19 +134,17 @@ export default class DaAutocomplete {
         this._autocomplete.appendChild(search);
     }
 
-    _initValidation() {
-        let validation = document.createElement('label');
-        let validationError = document.createElement('div');
+    _initParentForm() {
+        this._parentForm = this._control.form;
 
-        validation.className = 'da-autocomplete__validation';
-        validation.htmlFor = this._controlId;
-
-        validationError.className = 'da-autocomplete__validation-error';
-        validationError.innerText = this._config.validationErrorMessage;
-
-        validation.appendChild(validationError);
-
-        this._autocomplete.appendChild(validation);
+        if(this._parentForm) {
+            this._parentForm.addEventListener('keypress', (e) => {
+                if(e.keyCode == 13 && this._isOpen()) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        }
     }
 
     _initResult() {
@@ -199,6 +190,21 @@ export default class DaAutocomplete {
         this._success = success;
 
         this._autocomplete.appendChild(result);
+    }
+
+    _initValidation() {
+        let validation = document.createElement('label');
+        let validationError = document.createElement('div');
+
+        validation.className = 'da-autocomplete__validation';
+        validation.htmlFor = this._controlId;
+
+        validationError.className = 'da-autocomplete__validation-error';
+        validationError.innerText = this._config.validationErrorMessage;
+
+        validation.appendChild(validationError);
+
+        this._autocomplete.appendChild(validation);
     }
 
     _startSearch(searchPhrase) {
@@ -263,9 +269,22 @@ export default class DaAutocomplete {
         }
     }
 
+    _onClose(itemClick) {
+        let itemNumber = this._resultList.childElementCount;
+
+        if(itemNumber !== 1 || this._isLoading()) {
+            this._showError();
+        }
+        if(itemNumber === 1) {
+            this._resultList.querySelector('.da-autocomplete__result-item').dispatchEvent(itemClick);
+        }
+
+        this._clearSelected();
+        this._close();
+    }
+
     _moveFocusToNext() {
-        let parentForm = this._control.form;
-        let parentFormControls = parentForm.querySelectorAll('input,button,textarea,select');
+        let parentFormControls = this._parentForm.querySelectorAll('input,button,textarea,select');
         let breakOnNext = false;
 
         for(let control of parentFormControls) {
@@ -344,6 +363,10 @@ export default class DaAutocomplete {
                 resolve();
             }, preloaderHiddenDelay);
         });
+    }
+
+    _showError() {
+        this._autocomplete.classList.add('da-autocomplete--validation-error');
     }
 
     _open() {
