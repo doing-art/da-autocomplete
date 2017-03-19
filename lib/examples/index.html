@@ -9,7 +9,14 @@
         <title>Da-Autocomplete Exemple</title>
 
         <!-- LIB CSS -->
-        <!--<link rel="stylesheet" href="../css/da-autocomplete.css" type="text/css">-->
+        <link rel="stylesheet" href="css/da-autocomplete.min.css" type="text/css">
+
+        <!-- EXAMPLE CSS -->
+        <style>
+            .example {
+                width: 320px;
+            }
+        </style>
     </head>
     <body>
         <!-- START EXAMPLE FORM -->
@@ -19,27 +26,11 @@
         <!-- END EXAMPLE FORM -->
 
         <!-- LIB JS -->
-        <script src="../js/da-autocomplete.js" type="text/javascript"></script>
-
-        <style>
-            /*.form {*/
-                /*position: absolute;*/
-                /*left: 20px;*/
-                /*bottom: 199px;*/
-            /*}*/
-            .example {
-                width: 320px;
-            }
-        </style>
+        <script src="js/da-autocomplete.min.js" type="text/javascript"></script>
 
         <!-- EXAMPLE JS -->
         <script type="text/javascript">
-            var autocomplete = new DaAutocomplete.default('.example', {
-                placeholderMessage: 'Начните вводить код или название',
-                serverErrorMessage: 'Что-то пошло не так. Проверьте соединение с интернетом и попробуйте еще раз',
-                preloaderShowingDelay: 500,
-                preloaderMinShowDuration: 1000
-            });
+            var autocomplete = new DaAutocomplete.default('.example');
         </script>
     </body>
 </html>

@@ -58,13 +58,13 @@ export default class DaAutocomplete {
         let search = document.createElement('div');
         let placeholder = document.createElement('label');
         let control = this._controlExisting.cloneNode(true);
-        let itemClick = new Event('click');
+        let itemClick = DaHelpers.newEvent('click');
 
         control.id = this._controlId;
         control.classList.add('da-autocomplete__search-control');
 
         control.addEventListener('focus', () => {
-            this._autocomplete.classList.add('da-autocomplete--focus')
+            this._autocomplete.classList.add('da-autocomplete--focus');
             if(!this._autocomplete.classList.contains('da-autocomplete--select') && control.value.length > 0) {
                 this._open();
             }

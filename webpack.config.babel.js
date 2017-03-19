@@ -14,7 +14,7 @@ const config = {
 
     output: {
         path: __dirname + '/lib',
-        publicPath: '/',
+        publicPath: NODE_ENV === 'development' ? '/' : '../',
         library: 'DaAutocomplete',
         libraryTarget: "umd",
         filename: NODE_ENV === 'production' ? `[name]/${pkg.name}.min.js` : `[name]/${pkg.name}.js`,
@@ -42,7 +42,7 @@ const config = {
                 exclude: /node_modules/,
                 loader: 'babel?optional[]=runtime',
                 query: {
-                    presets: ['es2015']
+                    presets: ['es2015', 'stage-0']
                 }
             },
             {
@@ -53,6 +53,10 @@ const config = {
             {
                 test: /\.(ttf|eot|woff|svg)$/,
                 loader: 'file?name=[path][name].[ext]?[hash]'
+            },
+            {
+                include: 'server.js',
+                loader: 'file?name=[path][name].[ext]'
             }
         ]
     },
