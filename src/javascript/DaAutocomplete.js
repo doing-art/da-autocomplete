@@ -209,23 +209,25 @@ export default class DaAutocomplete {
 
     _startSearch(searchPhrase) {
         let XHR = ('onload' in new XMLHttpRequest()) ? XMLHttpRequest : XDomainRequest;
-        let xhr = new XHR();
         let url = `${this._config.requestUrl}?searchPhrase=${searchPhrase}&resultNumberToShow=${this._config.resultNumberToShow}`;
+        let xhr = new XHR();
+
+        if(this._xhr) {
+            this._xhr.abort();
+            this._onSearchRequestComplete();
+        }
 
         xhr.open('GET', url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
 
         let promise = new Promise( (resolve, reject) => {
-            let timer;
-
             xhr.onload = () => {
-                timer && clearTimeout(timer);
-                this._hidePrloader().then( () => {
+                this._onSearchRequestComplete(() => {
                     xhr.status === 200 ? resolve( xhr.responseText && JSON.parse(xhr.responseText) ) : reject();
                 });
             };
 
-            timer = this._showPreloader();
+            this._timer = this._showPreloader();
             this._clearResult();
             xhr.send();
         });
@@ -242,6 +244,16 @@ export default class DaAutocomplete {
             this._autocomplete.classList.add('da-autocomplete--error');
             this._hideSuccesMessage();
         });
+
+        this._xhr = xhr;
+    }
+
+    _onSearchRequestComplete(callback) {
+        let promise;
+
+        this._timer && clearTimeout(this._timer);
+        promise = this._hidePrloader();
+        callback && promise.then(callback);
     }
 
     _reinitResultItems() {
