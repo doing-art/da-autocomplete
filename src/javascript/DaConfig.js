@@ -7,6 +7,7 @@ export default {
     preloaderText: 'Загрузка',
     validationErrorMessage: 'Выберите значение из списка',
     requestUrl: '/search',
+    openOnTopDistance: 200,
     preloaderShowingDelay: 500,
     preloaderMinShowDuration: 1000,
     resultNumberToShow: 5

@@ -48,7 +48,7 @@
 
   &__result
     position: absolute
-    top: 34px
+    top: 100%
     left: 0
     display: none
     width: 100%
@@ -122,8 +122,13 @@
         outline: none
 
   &__validation
+    position: absolute
+    top: 100%
+    left: 0
+    width: 100%
     display: block
     padding: 0 3px
+    box-sizing: border-box
 
     &-error
       display: none
@@ -149,6 +154,17 @@
 
     .da-autocomplete__result
       display: block
+
+  &--open-top
+    .da-autocomplete__result
+      top: auto
+      bottom: 100%
+
+    .da-autocomplete__result-item:last-child
+      margin-bottom: 0
+
+    .da-autocomplete__result-item:first-child
+      margin-top: 6px
 
   &--error
     .da-autocomplete__result-notification

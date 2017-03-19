@@ -302,11 +302,18 @@ export default class DaAutocomplete {
     }
 
     _open() {
-        this._autocomplete.classList.add('da-autocomplete--open')
+        let distanceToBottom = window.innerHeight - this._control.getBoundingClientRect().bottom;
+
+        if(distanceToBottom < this._config.openOnTopDistance) {
+            this._autocomplete.classList.add('da-autocomplete--open-top');
+        }
+
+        this._autocomplete.classList.add('da-autocomplete--open');
     }
 
     _close() {
-        this._autocomplete.classList.remove('da-autocomplete--open')
+        this._autocomplete.classList.remove('da-autocomplete--open');
+        this._autocomplete.classList.remove('da-autocomplete--open-top')
     }
 
     _isOpen() {
