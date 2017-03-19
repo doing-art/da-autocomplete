@@ -86,19 +86,17 @@ export default class DaAutocomplete {
         });
 
         document.addEventListener('click', (e) => {
-            if(!DaHelpers.isChildOf(e.target, this._autocomplete)
-                    && this._autocomplete.classList.contains('da-autocomplete--open')) {
+            if(!DaHelpers.isChildOf(e.target, this._autocomplete) && this._isOpen()) {
                 let itemNumber = this._resultList.childElementCount;
-                let isLoading = this._preloader.classList.contains('da-autocomplete__result-preloader--show');
 
-                if(itemNumber !== 1 || isLoading) {
+                if(itemNumber !== 1 || this._isLoading()) {
                     this._autocomplete.classList.add('da-autocomplete--validation-error');
                 }
-
                 if(itemNumber === 1) {
                     this._resultList.querySelector('.da-autocomplete__result-item').dispatchEvent(itemClick);
                 }
 
+                this._clearSelected();
                 this._close();
             }
         });
@@ -237,25 +235,27 @@ export default class DaAutocomplete {
     }
 
     _reinitResultItems() {
-        this._resultItems = this._resultList.querySelectorAll('.da-autocomplete__result-item');
-        this._resultItemFocused = this._resultItems && this._resultItems[0];
+        let resultItems = this._resultList.querySelectorAll('.da-autocomplete__result-item');
 
-        for(let resultItem of this._resultItems) {
+        this._itemSelected = this._resultList.querySelector('.da-autocomplete__result-item--select');
+        this._itemFocused = resultItems && resultItems[0];
+
+        for(let resultItem of resultItems) {
             resultItem.addEventListener('click', (e) => {
                 this._control.value = e.target.innerText;
                 this._clearResult();
 
                 this._autocomplete.classList.add('da-autocomplete--select');
-                // resultItem.classList.add('da-autocomplete__result-item--select');
+                this._itemSelected = e.target;
+                this._itemSelected.classList.add('da-autocomplete__result-item--select');
 
                 this._close();
             });
 
             resultItem.addEventListener('mouseenter', (e) => {
-                this._resultItemFocused
-                    && this._resultItemFocused.classList.remove('da-autocomplete__result-item--focus');
-                this._resultItemFocused = e.target;
-                this._resultItemFocused.classList.add('da-autocomplete__result-item--focus');
+                this._itemFocused && this._itemFocused.classList.remove('da-autocomplete__result-item--focus');
+                this._itemFocused = e.target;
+                this._itemFocused.classList.add('da-autocomplete__result-item--focus');
             });
         }
     }
@@ -288,6 +288,13 @@ export default class DaAutocomplete {
         this._autocomplete.classList.remove('da-autocomplete--empty');
         this._autocomplete.classList.remove('da-autocomplete--validation-error');
         this._autocomplete.classList.remove('da-autocomplete--select');
+    }
+
+    _clearSelected() {
+        if(this._itemSelected) {
+            this._itemSelected.classList.remove('da-autocomplete__result-item--select');
+            this._itemSelected = null;
+        }
     }
 
     _showSuccesMessage(shownNumber, totalNumber) {
@@ -341,13 +348,23 @@ export default class DaAutocomplete {
         this._autocomplete.classList.remove('da-autocomplete--open')
     }
 
+    _isOpen() {
+        return this._autocomplete.classList.contains('da-autocomplete--open');
+    }
+
+    _isLoading() {
+        return this._preloader.classList.contains('da-autocomplete__result-preloader--show');
+    }
+
     _getResultListContent(result) {
         let content = '';
+        let selectedValue = this._itemSelected && this._itemSelected.innerText;
 
         if(result) {
             for(let [index, item] of result.entries()) {
                 content += `<li class="da-autocomplete__result-item ${index === 0 ? 
-                    'da-autocomplete__result-item--focus' : ''}">${item.City}</li>`;
+                    'da-autocomplete__result-item--focus' : ''} ${item.City === selectedValue ?
+                    'da-autocomplete__result-item--select' : ''}">${item.City}</li>`;
             }
         }
 
