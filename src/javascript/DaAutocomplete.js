@@ -11,8 +11,8 @@ export default class DaAutocomplete {
             this._initConfig(config);
             this._initTemplate();
             this._initSearch();
-            this._initResult();
             this._initValidation();
+            this._initResult();
         } else {
             console.log('Передайте селектор либо элемент(Node) первым параметром.');
         }
@@ -70,7 +70,7 @@ export default class DaAutocomplete {
         });
 
         control.addEventListener('blur', () => {
-            this._autocomplete.classList.remove('da-autocomplete--focus')
+            this._autocomplete.classList.remove('da-autocomplete--focus');
         });
 
         control.addEventListener('input', () => {
@@ -83,6 +83,31 @@ export default class DaAutocomplete {
             }
 
             this._startSearch(control.value);
+        });
+
+        control.addEventListener('keyup', (e) => {
+            let newFocused;
+
+            switch(e.keyCode) {
+                case 38:
+                    newFocused = this._itemFocused.previousElementSibling;
+                    newFocused && this._setFocusedItem(newFocused);
+                    break;
+                case 40:
+                    newFocused = this._itemFocused.nextElementSibling;
+                    newFocused && this._setFocusedItem(newFocused);
+                    break;
+                case 27:
+                    this._close();
+                    break;
+                case 13:
+                    this._itemFocused.dispatchEvent(itemClick);
+                    this._moveFocusToNext();
+                    break;
+            }
+
+            e.preventDefault();
+            e.stopPropagation();
         });
 
         document.addEventListener('click', (e) => {
@@ -116,6 +141,21 @@ export default class DaAutocomplete {
         this._autocomplete.appendChild(search);
     }
 
+    _initValidation() {
+        let validation = document.createElement('label');
+        let validationError = document.createElement('div');
+
+        validation.className = 'da-autocomplete__validation';
+        validation.htmlFor = this._controlId;
+
+        validationError.className = 'da-autocomplete__validation-error';
+        validationError.innerText = this._config.validationErrorMessage;
+
+        validation.appendChild(validationError);
+
+        this._autocomplete.appendChild(validation);
+    }
+
     _initResult() {
         let result = document.createElement('div');
         let resultList = document.createElement('ul');
@@ -125,7 +165,7 @@ export default class DaAutocomplete {
 
         let notification = document.createElement('div');
         let message = document.createElement('div');
-        let reloadBtn = document.createElement('button');
+        let reloadBtn = document.createElement('div');
 
         result.className = 'da-autocomplete__result';
         resultList.className = 'da-autocomplete__result-list';
@@ -138,7 +178,6 @@ export default class DaAutocomplete {
         notification.className = 'da-autocomplete__result-notification';
         message.className = 'da-autocomplete__result-message';
         message.innerText = this._config.serverErrorMessage;
-        reloadBtn.setAttribute('type', 'button');
         reloadBtn.className = 'da-autocomplete__result-reload';
         reloadBtn.innerText = this._config.reloadButtonText;
 
@@ -160,21 +199,6 @@ export default class DaAutocomplete {
         this._success = success;
 
         this._autocomplete.appendChild(result);
-    }
-
-    _initValidation() {
-        let validation = document.createElement('label');
-        let validationError = document.createElement('div');
-
-        validation.className = 'da-autocomplete__validation';
-        validation.htmlFor = this._controlId;
-
-        validationError.className = 'da-autocomplete__validation-error';
-        validationError.innerText = this._config.validationErrorMessage;
-
-        validation.appendChild(validationError);
-
-        this._autocomplete.appendChild(validation);
     }
 
     _startSearch(searchPhrase) {
@@ -216,8 +240,9 @@ export default class DaAutocomplete {
 
     _reinitResultItems() {
         let resultItems = this._resultList.querySelectorAll('.da-autocomplete__result-item');
-        let itemFocused = this._itemFocused = resultItems && resultItems[0];
         let itemSelected = this._itemSelected = this._resultList.querySelector('.da-autocomplete__result-item--select');
+
+        this._itemFocused = resultItems && resultItems[0];
 
         for(let resultItem of resultItems) {
             resultItem.addEventListener('click', (e) => {
@@ -233,12 +258,32 @@ export default class DaAutocomplete {
             });
 
             resultItem.addEventListener('mouseenter', (e) => {
-                itemFocused && itemFocused.classList.remove('da-autocomplete__result-item--focus');
-                itemFocused = e.target;
-                itemFocused.classList.add('da-autocomplete__result-item--focus');
-                this._itemFocused = itemFocused;
+                this._setFocusedItem(e.target);
             });
         }
+    }
+
+    _moveFocusToNext() {
+        let parentForm = this._control.form;
+        let parentFormControls = parentForm.querySelectorAll('input,button,textarea,select');
+        let breakOnNext = false;
+
+        for(let control of parentFormControls) {
+            if(control == this._control) {
+                breakOnNext = true;
+                continue;
+            }
+            if(breakOnNext) {
+                control.focus();
+                break;
+            }
+        }
+    }
+
+    _setFocusedItem(newFocused) {
+        this._itemFocused && this._itemFocused.classList.remove('da-autocomplete__result-item--focus');
+        newFocused.classList.add('da-autocomplete__result-item--focus');
+        this._itemFocused = newFocused;
     }
 
     _clearResult() {

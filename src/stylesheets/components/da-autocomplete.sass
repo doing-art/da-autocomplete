@@ -110,16 +110,11 @@
     &-reload
       width: 100%
       padding: 3px 7px 5px
-      border: none
       margin-top: 4px
+      box-sizing: border-box
       background-color: $focus-color
       color: #fff
-      font: inherit
-      text-align: left
       cursor: pointer
-
-      &:focus
-        outline: none
 
   &__validation
     position: absolute
@@ -148,10 +143,6 @@
       display: none
 
   &--open
-    .da-autocomplete__search-control
-      padding: 5px
-      border: 2px solid $focus-color
-
     .da-autocomplete__result
       display: block
 
