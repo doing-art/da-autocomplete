@@ -236,9 +236,8 @@ export default class DaAutocomplete {
 
     _reinitResultItems() {
         let resultItems = this._resultList.querySelectorAll('.da-autocomplete__result-item');
-
-        this._itemSelected = this._resultList.querySelector('.da-autocomplete__result-item--select');
-        this._itemFocused = resultItems && resultItems[0];
+        let itemFocused = this._itemFocused = resultItems && resultItems[0];
+        let itemSelected = this._itemSelected = this._resultList.querySelector('.da-autocomplete__result-item--select');
 
         for(let resultItem of resultItems) {
             resultItem.addEventListener('click', (e) => {
@@ -246,16 +245,18 @@ export default class DaAutocomplete {
                 this._clearResult();
 
                 this._autocomplete.classList.add('da-autocomplete--select');
-                this._itemSelected = e.target;
-                this._itemSelected.classList.add('da-autocomplete__result-item--select');
+                itemSelected = e.target;
+                itemSelected.classList.add('da-autocomplete__result-item--select');
+                this._itemSelected = itemSelected;
 
                 this._close();
             });
 
             resultItem.addEventListener('mouseenter', (e) => {
-                this._itemFocused && this._itemFocused.classList.remove('da-autocomplete__result-item--focus');
-                this._itemFocused = e.target;
-                this._itemFocused.classList.add('da-autocomplete__result-item--focus');
+                itemFocused && itemFocused.classList.remove('da-autocomplete__result-item--focus');
+                itemFocused = e.target;
+                itemFocused.classList.add('da-autocomplete__result-item--focus');
+                this._itemFocused = itemFocused;
             });
         }
     }
