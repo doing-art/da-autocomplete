@@ -180,7 +180,7 @@ export default class DaAutocomplete {
     _startSearch(searchPhrase) {
         let XHR = ('onload' in new XMLHttpRequest()) ? XMLHttpRequest : XDomainRequest;
         let xhr = new XHR();
-        let url = `${this._config.requestUrl}?searchPhrase=${searchPhrase}`;
+        let url = `${this._config.requestUrl}?searchPhrase=${searchPhrase}&resultNumberToShow=${this._config.resultNumberToShow}`;
 
         xhr.open('GET', url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
@@ -201,33 +201,13 @@ export default class DaAutocomplete {
         });
 
         promise.then( (result) => {
-            if(result && result.length) {
-                // КЛИЕНТ НАЧАЛО
-                let resultFiltered = this._filterResult(result, searchPhrase);
-                let totalLength = resultFiltered && resultFiltered.length;
-
-                if(totalLength > this._config.resultNumberToShow) {
-                    resultFiltered = resultFiltered.splice(0, this._config.resultNumberToShow);
-                }
-
-                if(!totalLength) {
-                    this._autocomplete.classList.add('da-autocomplete--empty');
-                }
-                // КЛИЕНТ КОНЕЦ
-                this._resultList.innerHTML = this._getResultListContent(resultFiltered);
+            if(result.data && result.data.length) {
+                this._resultList.innerHTML = this._getResultListContent(result.data);
                 this._reinitResultItems();
-
-                //КЛИЕНТ НАЧАЛО
-                this._showSuccesMessage(resultFiltered.length, totalLength);
-                //КЛИЕНТ КОНЕЦ
-
-                // СЕРВЕР (ПОДПРАВИТЬ ДЛИНЫ)
-                // this._showSuccesMessage(this._config.resultNumberToShow, resultFiltered.length);
+                this._showSuccesMessage(result.data.length, result.total);
+            } else {
+                this._autocomplete.classList.add('da-autocomplete--empty');
             }
-            // СЕРВЕР
-            // else {
-            //     this._autocomplete.classList.add('da-autocomplete--empty');
-            // }
         }, () => {
             this._autocomplete.classList.add('da-autocomplete--error');
             this._hideSuccesMessage();
@@ -260,26 +240,6 @@ export default class DaAutocomplete {
             });
         }
     }
-
-    // КЛИЕНТ НАЧАЛО
-    _filterResult(result, searchPhrase) {
-        let resultFiltered = [];
-
-        if(result && searchPhrase) {
-            let searchRegExp = new RegExp(`(\\s|^)${searchPhrase.toLowerCase()}`);
-
-            for(let item of result) {
-                if( searchRegExp.test(item.City.toLowerCase()) ) {
-                    resultFiltered.push(item);
-                }
-            }
-        } else {
-            resultFiltered = result;
-        }
-
-        return resultFiltered;
-    }
-    // КЛИЕНТ КОНЕЦ
 
     _clearResult() {
         this._resultList.innerHTML = '';

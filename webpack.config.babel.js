@@ -77,7 +77,14 @@ const config = {
         host: 'localhost',
         port: '8080',
         contentBase: __dirname + '/lib',
-        hot: true
+        hot: true,
+        proxy: [
+            {
+                context: ['/search'],
+                target: 'http://localhost:3000',
+                secure: false
+            }
+        ]
     }
 };
 

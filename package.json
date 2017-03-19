@@ -18,7 +18,9 @@
     "prod": "NODE_ENV=production webpack",
     "dev": "webpack-dev-server"
   },
-  "dependencies": {},
+  "dependencies": {
+    "express": "^4.15.2"
+  },
   "devDependencies": {
     "autoprefixer-loader": "^3.2.0",
     "babel-cli": "^6.22.2",

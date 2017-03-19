@@ -6,7 +6,7 @@ export default {
     reloadButtonText: 'Обновить',
     preloaderText: 'Загрузка',
     validationErrorMessage: 'Выберите значение из списка',
-    requestUrl: 'kladr.json',
+    requestUrl: '/search',
     preloaderShowingDelay: 500,
     preloaderMinShowDuration: 1000,
     resultNumberToShow: 5
