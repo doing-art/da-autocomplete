@@ -15,7 +15,7 @@ const config = {
     output: {
         path: __dirname + '/lib',
         publicPath: NODE_ENV === 'development' ? '/' : '../',
-        library: 'DaAutocomplete',
+        library: 'da',
         libraryTarget: "umd",
         filename: NODE_ENV === 'production' ? `[name]/${pkg.name}.min.js` : `[name]/${pkg.name}.js`,
     },
@@ -26,7 +26,7 @@ const config = {
 
     resolve: {
         modules: ['src', 'node_modules'],
-        extensions: ['.js', '.sass', '.ttf']
+        extensions: ['.js', '.sass', '.ttf', '.eot', '.woff', '.svg']
     },
 
     resolveLoader: {
@@ -53,10 +53,6 @@ const config = {
             {
                 test: /\.(ttf|eot|woff|svg)$/,
                 loader: 'file?name=[path][name].[ext]?[hash]'
-            },
-            {
-                include: 'server.js',
-                loader: 'file?name=[path][name].[ext]'
             }
         ]
     },
